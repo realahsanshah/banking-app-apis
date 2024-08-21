@@ -1,4 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { createDatabase } from 'typeorm-extension';
+import { User } from './entity/user/user.entity';
+import { Otp } from './entity/otp/otp.entity';
 
 @Injectable()
 export class AppService {
@@ -7,21 +11,30 @@ export class AppService {
   }
 
   static async createConnection() {
-    const connectionObject: TypeOrmModuleAsyncOptions = {
+    const connectionObject = {
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT),
+      port: Number(process.env.POSTGRES_PORT),
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      entities: [__dirname + './../**/**.entity{.ts,.js}'],
+      entities: [User, Otp],
       synchronize: true,
     };
+
     await createDatabase({
       ifNotExist: true,
-      options: connectionObject,
+      options: {
+        type: 'postgres',
+        host: process.env.POSTGRES_HOST,
+        port: Number(process.env.POSTGRES_PORT),
+        username: process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DATABASE,
+        synchronize: true,
+      },
     });
 
-    return connectionObject;
+    return connectionObject as TypeOrmModuleAsyncOptions;
   }
 }

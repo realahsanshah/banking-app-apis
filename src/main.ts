@@ -1,11 +1,22 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { HttpInterceptor } from './interceptor/http.interceptor';
+import { HttpExceptionFilter } from './filters/bad-request.filter';
+import { QueryFailedFilter } from './filters/query-failed.filter';
+import { ErrorFilter } from './filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const reflector = app.get(Reflector);
+
+  app.useGlobalFilters(
+    new HttpExceptionFilter(reflector),
+    new QueryFailedFilter(reflector),
+    new ErrorFilter(reflector)
+  );
 
   app.enableCors();
 
@@ -16,7 +27,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new HttpInterceptor());
 
   const config = new DocumentBuilder()
     .setTitle('Banking APIs')

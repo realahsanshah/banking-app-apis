@@ -1,5 +1,5 @@
 import { GenderEnum } from "src/enum/gender/gender.enum";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
 
 @Entity({ name: 'users' })
@@ -11,12 +11,12 @@ export class User extends BaseEntity {
         type: 'varchar',
         length: 255,
         nullable: false,
-        unique: true,
         transformer: {
             to: (value: string) => value.toLowerCase(),
             from: (value: string) => value,
         },
     })
+    @Index({ unique: true, where: 'is_deleted = false' })
     email: string;
 
     @Column({
@@ -45,7 +45,7 @@ export class User extends BaseEntity {
         nullable: false,
         default: false,
     })
-    isVerified: boolean;
+    "isVerified": boolean;
 
     // Gender=> Male, Female
     @Column({
@@ -55,6 +55,13 @@ export class User extends BaseEntity {
         enum: GenderEnum,
     })
     gender: GenderEnum;
+
+    @Column({
+        type: 'boolean',
+        nullable: false,
+        default: false,
+    })
+    is_deleted: boolean;
 
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
@@ -70,4 +77,3 @@ export class User extends BaseEntity {
         return rest;
     }
 }
-

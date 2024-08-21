@@ -1,16 +1,9 @@
 import { Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 export class BaseEntity {
-    @Column({
-        type: 'boolean',
-        nullable: false,
-        default: false,
-    })
-    isDeleted: boolean;
-
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updated_at: Date;
 }

@@ -10,9 +10,9 @@ import { UserModule } from './components/user/user.module';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        return AppService.createConnection(),
-      }),
+      useFactory: async () => {
+        return await AppService.createConnection();
+      },
     }),
     UserModule,
     AuthModule,
