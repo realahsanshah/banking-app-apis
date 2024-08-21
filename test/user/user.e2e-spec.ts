@@ -9,15 +9,27 @@ import { LoginDTO } from "../../src/components/auth/dto/login.dto";
 import { OtpTypeEnum } from "../../src/enum/otp-type/otp-type.enum";
 import { OtpDTO } from "../../src/components/auth/dto/otp.dto";
 import { PasswordDTO } from "../../src/components/auth/dto/password.dto";
+import { Reflector } from "@nestjs/core";
+import { QueryFailedFilter } from "../../src/filters/query-failed.filter";
+import { HttpExceptionFilter } from "../../src/filters/bad-request.filter";
+import { ErrorFilter } from "../../src/filters/exception.filter";
 
 let app: INestApplication;
 let helper: Helper;
+
 beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
         imports: [AppModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
+    const reflector = app.get(Reflector);
+
+    app.useGlobalFilters(
+        new HttpExceptionFilter(reflector),
+        new QueryFailedFilter(reflector),
+        new ErrorFilter(reflector)
+    );
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
     helper = new Helper(app);
@@ -76,7 +88,7 @@ describe('User', () => {
             .send(userData)
 
         console.log(response.body);
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
 
     })
 
@@ -123,7 +135,7 @@ describe('User', () => {
             .post('/auth/login')
             .send(userData)
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
     });
 
     it("Test /login", async () => {
@@ -143,6 +155,18 @@ describe('User', () => {
     });
 
     it("Test /getLoggedInUser", async () => {
+        const userData: LoginDTO = {
+            email: "test@gmail.com",
+            password: "Test@123",
+        }
+
+        const loginResponse = await request(app.getHttpServer())
+            .post('/auth/login')
+            .send(userData)
+
+        expect(loginResponse.status).toBe(201);
+        const token = loginResponse?.body?.access_token;
+
         const response = await request(app.getHttpServer())
             .get('/auth/getLoggedInUser').set("Authorization", helper?.getToken());
 
@@ -162,6 +186,17 @@ describe('User', () => {
     })
 
     it("Test /verifyForgotPasswordOtp", async () => {
+
+        const email = {
+            email: "test@gmail.com",
+        }
+
+        const forgotPasswordResponse = await request(app.getHttpServer())
+            .post('/auth/forgotPassword')
+            .send(email)
+
+        expect(forgotPasswordResponse.statusCode).toBe(201);
+
         const otp = await helper.dataSource.getRepository('Otp').findOne({
             where: {
                 otpType: OtpTypeEnum.FORGOT_PASSWORD,
@@ -172,7 +207,7 @@ describe('User', () => {
             email: "test@gmail.com",
             otp: otp?.code,
         };
-        debugger
+
         const response = await request(app.getHttpServer())
             .post('/auth/verifyForgotPasswordOtp')
             .send(emailOtp)
@@ -180,16 +215,16 @@ describe('User', () => {
         expect(response?.statusCode).toBe(201);
 
         const token = response?.body?.access_token;
-        debugger
+
         const passwordDto: PasswordDTO = {
             password: 'Abc@1234',
         }
-        debugger
+
         const resetPassword = await request(app.getHttpServer())
             .post('/auth/resetPassword')
             .set('Authorization', token)
             .send(passwordDto)
-        debugger
+
         expect(resetPassword).toBe(201);
 
         const emailDto = {
@@ -200,7 +235,7 @@ describe('User', () => {
         const responseLogin = await request(app.getHttpServer())
             .post("/auth/login")
             .send(emailDto)
-
+        debugger
         expect(responseLogin.statusCode).toBe(201);
     })
 

@@ -203,7 +203,9 @@ export class UserService {
 
         const otp = await this.otpRepository.findOne({
             where: {
-                user: user,
+                user: {
+                    id: user?.id,
+                },
                 code: otpDto?.otp,
                 isUsed: false,
                 otpType: OtpTypeEnum.FORGOT_PASSWORD,

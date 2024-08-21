@@ -11,8 +11,10 @@ import { NodeEnvEnum } from './enum/node-env/node-env.enum';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  getHello(): any {
+    return {
+      message: 'Hello World!',
+    }
   }
 
   static envConfiguration(): string {

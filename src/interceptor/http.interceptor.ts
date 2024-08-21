@@ -14,7 +14,6 @@ export class HttpInterceptor implements NestInterceptor {
         const request = context.switchToHttp().getRequest();
         const { method, url } = request;
         console.log(`[${method}] ${url}`);
-
         return next.handle().pipe(
             map(data => {
                 if (typeof data == 'object') {

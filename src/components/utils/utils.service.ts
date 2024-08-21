@@ -7,6 +7,7 @@ import { Otp } from '../../entity/otp/otp.entity';
 import { User } from '../../entity/user/user.entity';
 import * as nodemailer from 'nodemailer';
 import { getOtpEmail } from '../../common/emails/otp-email.email';
+import { NodeEnvEnum } from '../../enum/node-env/node-env.enum';
 
 @Injectable()
 export class UtilsService {
@@ -47,6 +48,11 @@ export class UtilsService {
     }
 
     async sendEmail(sendEmailDto: SendEmailDTO) {
+        if (process.env.NODE_ENV === NodeEnvEnum.TEST) {
+            return {
+                message: 'Email sent successfully',
+            }
+        }
         // Send email logic here
         await this.transporter.sendMail({
             from: process.env.GMAIL_EMAIL,
