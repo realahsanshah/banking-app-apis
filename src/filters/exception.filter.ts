@@ -22,8 +22,6 @@ export class ErrorFilter implements ExceptionFilter {
         // log exception
         const resp = new responseData({});
         resp.success = false;
-        debugger
-        console.error("ErrorFilter -> catch -> exception", exception)
         resp.message = exception?.response?.message || exception?.message;
         if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) {
             resp.exception = exception?.stack;

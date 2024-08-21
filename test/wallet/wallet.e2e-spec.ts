@@ -104,7 +104,7 @@ describe('Wallet', () => {
 
     it("Test /withdrawAmount", async () => {
         const amountDto: AmountDTO = {
-            amount: 100,
+            amount: 10,
         }
         const amountRes = await request(app.getHttpServer())
             .post('/wallet/withdrawAmount')
