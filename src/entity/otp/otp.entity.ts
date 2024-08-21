@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../user/user.entity";
 import { OtpTypeEnum } from "src/enum/otp-type/otp-type.enum";
 
@@ -7,12 +7,9 @@ export class Otp {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({
-        type: 'uuid',
-        nullable: false,
-    })
     @ManyToOne(() => User, user => user.id)
-    userId: string;
+    @JoinColumn({ name: 'userId' })
+    user: User
 
     @Column({
         type: 'varchar',

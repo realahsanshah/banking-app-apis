@@ -1,6 +1,7 @@
 import { GenderEnum } from "src/enum/gender/gender.enum";
-import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
+import { Otp } from "../otp/otp.entity";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -62,6 +63,9 @@ export class User extends BaseEntity {
         default: false,
     })
     is_deleted: boolean;
+
+    @OneToMany(() => Otp, otp => otp.user)
+    otps: Otp[];
 
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);

@@ -19,6 +19,11 @@ export class AuthController {
         return await this._authService.signup(signupDto);
     }
 
+    @Post('resendOtp')
+    async resendOtp(@Body() emailDto: EmailDTO) {
+        return await this._authService.resendOtp(emailDto);
+    }
+
     @Post('verifyOtp')
     async verifyOtp(@Body() otpDto: OtpDTO) {
         return await this._authService.verifyUser(otpDto);

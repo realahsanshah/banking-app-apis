@@ -10,10 +10,15 @@ import { UtilsService } from '../utils/utils.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Otp]),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '360000000s' },
+    JwtModule.registerAsync({
+      imports: [],
+      useFactory: () => {
+        return {
+          secret: process.env.JWT_SECRET,
+          signOptions: { expiresIn: '360000000s' },
+          global: true,
+        }
+      }
     }),
   ],
   controllers: [UserController],

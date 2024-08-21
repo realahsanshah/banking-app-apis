@@ -33,6 +33,7 @@ async function bootstrap() {
     .setTitle('Banking APIs')
     .setDescription('Banking APIs description')
     .setVersion('1.0')
+    .addBearerAuth()
     .addTag('bank')
     .build();
 

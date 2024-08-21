@@ -14,9 +14,15 @@ export class AuthService {
         private jwtService: JwtService,
     ) { }
 
-    generateToken(user) {
-        return {
-            access_token: this.jwtService.sign(user),
+    generateToken(user, timeout: number = null) {
+        if (!timeout) {
+            return {
+                access_token: `Bearer ${this.jwtService.sign(user)}`,
+            }
+        } else {
+            return {
+                access_token: `Bearer ${this.jwtService.sign(user, { expiresIn: timeout })}`,
+            }
         }
     }
 
@@ -27,6 +33,14 @@ export class AuthService {
             message: 'User created successfully',
             user: user,
         }
+    }
+
+    async resendOtp(emailDto: EmailDTO) {
+        await this.userService.resendOtp(emailDto);
+
+        return {
+            message: 'OTP sent successfully',
+        };
     }
 
     async verifyUser(otpDto: OtpDTO) {
@@ -73,7 +87,7 @@ export class AuthService {
         const userData = await this.userService.resetPassword(passwordDto, user);
 
         return {
-            ...this.generateToken(userData),
+            ...this.generateToken(userData, 60 * 60),
             user: userData,
         };
     }

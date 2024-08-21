@@ -8,14 +8,17 @@ import { UserModule } from './components/user/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
         return await AppService.createConnection();
       },
     }),
+    AuthModule.forRoot(),
     UserModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

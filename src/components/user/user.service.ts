@@ -31,6 +31,17 @@ export class UserService {
             throw new Error('User already exists');
         }
 
+        const otps = await this.otpRepository.find({
+            where: {
+                user: {
+                    email: signupDto?.email,
+                },
+            },
+        });
+        await Promise.all(otps.map(async (otp) => {
+            await this.otpRepository.delete(otp);
+        }))
+
         await this.userRepository.delete({
             email: signupDto?.email,
         })
@@ -42,15 +53,35 @@ export class UserService {
         user.full_name = signupDto?.full_name;
         user.cnic = signupDto?.cnic;
         user.gender = signupDto?.gender
-        debugger
-        await user.hashPassword();
-        debugger
-        await this.userRepository.save(user);
-        debugger
 
-        await this.utilsService.sendOtp(user?.id, signupDto?.email, OtpTypeEnum.VERIFY_USER);
+        await user.hashPassword();
+
+        await this.userRepository.save(user);
+
+        await this.utilsService.sendOtp(user, signupDto?.email, OtpTypeEnum.VERIFY_USER, user?.full_name);
 
         return user?.toJSON();
+    }
+
+    async resendOtp(emailDto: EmailDTO) {
+        const user = await this.userRepository.findOne({
+            where: {
+                email: emailDto.email,
+                is_deleted: false,
+            }
+        });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const type = user?.isVerified ? OtpTypeEnum.FORGOT_PASSWORD : OtpTypeEnum.VERIFY_USER;
+
+        await this.utilsService.sendOtp(user, emailDto?.email, type, user?.full_name);
+
+        return {
+            message: 'OTP sent successfully',
+        }
     }
 
     async verifyUser(otpDto: OtpDTO) {
@@ -62,20 +93,22 @@ export class UserService {
             }
         });
 
-        debugger
-
         if (!user) {
             throw new Error('User not found');
         }
-        debugger
+
         const otp = await this.otpRepository.findOne({
             where: {
-                userId: user?.id,
+                user: user,
                 code: otpDto?.otp,
                 isUsed: false,
             }
         });
-        debugger
+
+        if (!otp) {
+            throw new Error('Invalid OTP');
+        }
+
         // check expiry of otp
         if (otp?.expiresAt < new Date()) {
             throw new Error('OTP expired');
@@ -101,17 +134,17 @@ export class UserService {
                 is_deleted: false,
             }
         });
-
+        debugger
         if (!user) {
             throw new Error('User not found');
         }
-
+        debugger
         const isPasswordMatched = await user.checkPassword(loginDto?.password);
-
+        debugger
         if (!isPasswordMatched) {
             throw new Error('Invalid password');
         }
-
+        debugger
         return user?.toJSON();
     }
 
@@ -128,7 +161,7 @@ export class UserService {
             throw new Error('User not found');
         }
 
-        await this.utilsService.sendOtp(user?.id, emailDto?.email, OtpTypeEnum.FORGOT_PASSWORD);
+        await this.utilsService.sendOtp(user, emailDto?.email, OtpTypeEnum.FORGOT_PASSWORD, user?.full_name);
 
         return {
             message: 'OTP sent successfully',
@@ -149,15 +182,19 @@ export class UserService {
 
         const otp = await this.otpRepository.findOne({
             where: {
-                userId: user?.id,
+                user: user,
                 code: otpDto?.otp,
                 isUsed: false,
                 otpType: OtpTypeEnum.FORGOT_PASSWORD,
             }
         });
 
+        if (!otp) {
+            throw new Error('Invalid OTP');
+        }
+
         // check expiry of otp
-        if (otp.expiresAt < new Date()) {
+        if (otp?.expiresAt < new Date()) {
             throw new Error('OTP expired');
         }
 
@@ -174,15 +211,22 @@ export class UserService {
     }
 
     async resetPassword(passwordDto: PasswordDTO, user) {
+        const userData = await this.userRepository.findOne({
+            where: {
+                email: user.email,
+                is_deleted: false,
+            }
+        });
+
         if (!user?.isForgotPassword) {
             throw new Error('User not allowed to reset password');
         }
 
-        user.password = passwordDto?.password;
+        userData.password = passwordDto?.password;
 
-        await user.hashPassword();
+        await userData.hashPassword();
 
-        await this.userRepository.save(user);
+        await this.userRepository.save(userData);
 
         return {
             message: 'Password reset successfully',
