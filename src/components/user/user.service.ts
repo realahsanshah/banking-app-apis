@@ -10,14 +10,27 @@ import { LoginDTO } from '../auth/dto/login.dto';
 import { OtpTypeEnum } from 'src/enum/otp-type/otp-type.enum';
 import { EmailDTO } from '../auth/dto/email.dto';
 import { PasswordDTO } from '../auth/dto/password.dto';
+import { Wallet } from 'src/entity/wallet/wallet.entity';
+import { WalletService } from '../wallet/wallet.service';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Otp) private readonly otpRepository: Repository<Otp>,
+        @InjectRepository(Wallet) private readonly walletRepository: Repository<Wallet>,
+        private walletService: WalletService,
         private utilsService: UtilsService
-    ) { }
+    ) {
+        // this.deleteData();
+    }
+
+    async deleteData() {
+        await this.walletRepository.delete({});
+        await this.otpRepository.delete({});
+        await this.userRepository.delete({});
+
+    }
 
     async createUser(signupDto: SignupDTO) {
         const existingUser = await this.userRepository.findOne({
@@ -92,23 +105,26 @@ export class UserService {
                 is_deleted: false,
             }
         });
-
+        debugger
         if (!user) {
             throw new Error('User not found');
         }
-
+        debugger
         const otp = await this.otpRepository.findOne({
             where: {
-                user: user,
+                user: {
+                    id: user?.id,
+                },
                 code: otpDto?.otp,
                 isUsed: false,
+                otpType: OtpTypeEnum.VERIFY_USER,
             }
         });
-
+        debugger
         if (!otp) {
             throw new Error('Invalid OTP');
         }
-
+        debugger
         // check expiry of otp
         if (otp?.expiresAt < new Date()) {
             throw new Error('OTP expired');
@@ -118,9 +134,14 @@ export class UserService {
 
         otp.isUsed = true;
 
+        const wallet = this.walletService.createWallet();
+
+        wallet.user = user;
+
         await this.utilsService.commitTransactions([
             user,
             otp,
+            wallet,
         ]);
 
         return user?.toJSON();
@@ -134,17 +155,17 @@ export class UserService {
                 is_deleted: false,
             }
         });
-        debugger
+
         if (!user) {
             throw new Error('User not found');
         }
-        debugger
+
         const isPasswordMatched = await user.checkPassword(loginDto?.password);
-        debugger
+
         if (!isPasswordMatched) {
             throw new Error('Invalid password');
         }
-        debugger
+
         return user?.toJSON();
     }
 

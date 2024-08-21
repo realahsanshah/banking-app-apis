@@ -6,10 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Otp } from 'src/entity/otp/otp.entity';
 import { UtilsService } from '../utils/utils.service';
+import { Wallet } from 'src/entity/wallet/wallet.entity';
+import { WalletModule } from '../wallet/wallet.module';
+import { WalletService } from '../wallet/wallet.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Otp]),
+    TypeOrmModule.forFeature([
+      User,
+      Otp,
+      Wallet,
+    ]),
     JwtModule.registerAsync({
       imports: [],
       useFactory: () => {
@@ -20,9 +27,10 @@ import { UtilsService } from '../utils/utils.service';
         }
       }
     }),
+    WalletModule,
   ],
   controllers: [UserController],
-  providers: [UserService, UtilsService],
+  providers: [UserService, UtilsService, WalletService],
   exports: [UserService],
 })
 export class UserModule { }

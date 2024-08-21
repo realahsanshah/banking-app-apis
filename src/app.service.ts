@@ -3,6 +3,8 @@ import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { createDatabase } from 'typeorm-extension';
 import { User } from './entity/user/user.entity';
 import { Otp } from './entity/otp/otp.entity';
+import { Wallet } from './entity/wallet/wallet.entity';
+import { Transaction } from './entity/transaction/transaction.entity';
 
 @Injectable()
 export class AppService {
@@ -18,7 +20,12 @@ export class AppService {
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      entities: [User, Otp],
+      entities: [
+        User,
+        Otp,
+        Wallet,
+        Transaction,
+      ],
       synchronize: true,
     };
 
