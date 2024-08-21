@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../user/user.entity";
 import { BaseEntity } from "../base/base.entity";
-import { TransactionStatusEnum } from "src/enum/transaction-status/transaction-status.enum";
-import { TransactionTypeEnum } from "src/enum/transaction-type/transaction-type.enum";
+import { TransactionStatusEnum } from "../../enum/transaction-status/transaction-status.enum";
+import { TransactionTypeEnum } from "../../enum/transaction-type/transaction-type.enum";
 
 @Entity({ name: "transactions" })
 export class Transaction extends BaseEntity {

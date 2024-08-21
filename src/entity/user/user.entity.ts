@@ -1,10 +1,9 @@
-import { GenderEnum } from "src/enum/gender/gender.enum";
+import { GenderEnum } from "../../enum/gender/gender.enum";
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { Otp } from "../otp/otp.entity";
 import { BaseEntity } from "../base/base.entity";
 import { Wallet } from "../wallet/wallet.entity";
-import { Transaction } from "../transaction/transaction.entity";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {

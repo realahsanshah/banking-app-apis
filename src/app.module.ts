@@ -10,8 +10,9 @@ import { WalletModule } from './components/wallet/wallet.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: [
+        AppService.envConfiguration(),
+      ]
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async () => {

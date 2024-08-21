@@ -1,9 +1,30 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "setupFilesAfterEnv": [
+    "./jest.setup.ts"
+  ],
+  "moduleNameMapper": {
+    "@modules/(.*)": "<rootDir>/src/modules/$1",
+    "@utils/(.*)": "<rootDir>/src/utils/$1"
+  },
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/utils/**/*.{js,ts}"
+  ],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "package.json",
+    "<rootDir>/src/main.ts",
+    "package-lock.json"
+  ]
 }

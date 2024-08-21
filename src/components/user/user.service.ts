@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entity/user/user.entity';
+import { User } from '../../entity/user/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { SignupDTO } from '../auth/dto/signup.dto';
 import { OtpDTO } from '../auth/dto/otp.dto';
-import { Otp } from 'src/entity/otp/otp.entity';
+import { Otp } from '../../entity/otp/otp.entity';
 import { UtilsService } from '../utils/utils.service';
 import { LoginDTO } from '../auth/dto/login.dto';
-import { OtpTypeEnum } from 'src/enum/otp-type/otp-type.enum';
+import { OtpTypeEnum } from '../../enum/otp-type/otp-type.enum';
 import { EmailDTO } from '../auth/dto/email.dto';
 import { PasswordDTO } from '../auth/dto/password.dto';
-import { Wallet } from 'src/entity/wallet/wallet.entity';
+import { Wallet } from '../../entity/wallet/wallet.entity';
 import { WalletService } from '../wallet/wallet.service';
 
 @Injectable()

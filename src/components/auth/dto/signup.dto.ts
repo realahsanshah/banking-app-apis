@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { EmailDTO } from "./email.dto";
 import { IsEnum, IsNotEmpty, IsStrongPassword, Matches, MinLength } from "class-validator";
-import { CNIC_REGEX } from "src/common/regex/regex";
-import { GenderEnum } from "src/enum/gender/gender.enum";
+import { CNIC_REGEX } from "../../../common/regex/regex";
+import { GenderEnum } from "../../../enum/gender/gender.enum";
 
 export class SignupDTO extends EmailDTO {
     @ApiProperty()

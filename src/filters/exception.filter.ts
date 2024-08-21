@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Response } from 'express';
-import { responseData } from 'src/common/dto/response.dto';
+import { responseData } from './../common/dto/response.dto';
 
 @Catch(Error)
 export class ErrorFilter implements ExceptionFilter {
@@ -22,6 +22,7 @@ export class ErrorFilter implements ExceptionFilter {
         // log exception
         const resp = new responseData({});
         resp.success = false;
+        debugger
         console.error("ErrorFilter -> catch -> exception", exception)
         resp.message = exception?.response?.message || exception?.message;
         if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) {

@@ -1,4 +1,4 @@
-import { GenderEnum } from "src/enum/gender/gender.enum";
+import { GenderEnum } from "../../enum/gender/gender.enum";
 import { ViewColumn, ViewEntity } from "typeorm";
 
 @ViewEntity({

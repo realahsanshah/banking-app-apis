@@ -1,17 +1,17 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Wallet } from 'src/entity/wallet/wallet.entity';
-import { generateStringId } from 'src/utils/utils';
+import { Wallet } from '../../entity/wallet/wallet.entity';
+import { generateStringId } from '../../utils/utils';
 import { Repository } from 'typeorm';
 import { AmountDTO } from './dto/amount.dto'
-import { Transaction } from 'src/entity/transaction/transaction.entity';
+import { Transaction } from '../../entity/transaction/transaction.entity';
 import { UtilsService } from '../utils/utils.service';
-import { TransactionStatusEnum } from 'src/enum/transaction-status/transaction-status.enum';
-import { TransactionTypeEnum } from 'src/enum/transaction-type/transaction-type.enum';
+import { TransactionStatusEnum } from '../../enum/transaction-status/transaction-status.enum';
+import { TransactionTypeEnum } from '../../enum/transaction-type/transaction-type.enum';
 import { TransferDTO } from './dto/transfer.dto';
-import { User } from 'src/entity/user/user.entity';
-import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with-user.view-entity';
-import { TransactionView } from 'src/view-entity/transaction-view/transaction.view-entity';
+import { User } from '../../entity/user/user.entity';
+import { WalletWithUserView } from '../../view-entity/wallet-with-user/wallet-with-user.view-entity';
+import { TransactionView } from '../../view-entity/transaction-view/transaction.view-entity';
 
 @Injectable()
 export class WalletService {

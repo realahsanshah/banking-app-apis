@@ -5,7 +5,7 @@ import { SignupDTO } from './dto/signup.dto';
 import { OtpDTO } from './dto/otp.dto';
 import { LoginDTO } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { GetUser } from 'src/decorator/user.decorator';
+import { GetUser } from '../../decorator/user.decorator';
 import { EmailDTO } from './dto/email.dto';
 import { PasswordDTO } from './dto/password.dto';
 

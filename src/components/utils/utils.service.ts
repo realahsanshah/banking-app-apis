@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { SendEmailDTO } from './dto/sendEmail.dto';
-import { OtpTypeEnum } from 'src/enum/otp-type/otp-type.enum';
+import { OtpTypeEnum } from '../../enum/otp-type/otp-type.enum';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Otp } from 'src/entity/otp/otp.entity';
-import { User } from 'src/entity/user/user.entity';
+import { Otp } from '../../entity/otp/otp.entity';
+import { User } from '../../entity/user/user.entity';
 import * as nodemailer from 'nodemailer';
-import { getOtpEmail } from 'src/common/emails/otp-email.email';
+import { getOtpEmail } from '../../common/emails/otp-email.email';
 
 @Injectable()
 export class UtilsService {
