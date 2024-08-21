@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useGlobalFilters(
     new HttpExceptionFilter(reflector),
     new QueryFailedFilter(reflector),
-    new ErrorFilter(reflector)
+    new ErrorFilter(reflector),
   );
 
   app.enableCors();

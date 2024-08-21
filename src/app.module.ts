@@ -10,9 +10,7 @@ import { WalletModule } from './components/wallet/wallet.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [
-        AppService.envConfiguration(),
-      ]
+      envFilePath: [AppService.envConfiguration()],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
@@ -26,4 +24,4 @@ import { WalletModule } from './components/wallet/wallet.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

@@ -19,8 +19,8 @@ export class AuthModule {
               secret: process.env.JWT_SECRET,
               signOptions: { expiresIn: '360000000s' },
               global: true,
-            }
-          }
+            };
+          },
         }),
         TypeOrmModule.forFeature([User]),
         UserModule,
@@ -28,7 +28,6 @@ export class AuthModule {
       controllers: [AuthController],
       providers: [AuthService, JwtStrategy],
       module: AuthModule,
-    }
+    };
   }
-
 }

@@ -12,50 +12,49 @@ import { PasswordDTO } from './dto/password.dto';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private _authService: AuthService) { }
+  constructor(private _authService: AuthService) {}
 
-    @Post('signup')
-    async signup(@Body() signupDto: SignupDTO) {
-        return await this._authService.signup(signupDto);
-    }
+  @Post('signup')
+  async signup(@Body() signupDto: SignupDTO) {
+    return await this._authService.signup(signupDto);
+  }
 
-    @Post('resendOtp')
-    async resendOtp(@Body() emailDto: EmailDTO) {
-        return await this._authService.resendOtp(emailDto);
-    }
+  @Post('resendOtp')
+  async resendOtp(@Body() emailDto: EmailDTO) {
+    return await this._authService.resendOtp(emailDto);
+  }
 
-    @Post('verifyOtp')
-    async verifyOtp(@Body() otpDto: OtpDTO) {
-        return await this._authService.verifyUser(otpDto);
-    }
+  @Post('verifyOtp')
+  async verifyOtp(@Body() otpDto: OtpDTO) {
+    return await this._authService.verifyUser(otpDto);
+  }
 
-    @Post('login')
-    async login(@Body() loginDto: LoginDTO) {
-        return await this._authService.login(loginDto);
-    }
+  @Post('login')
+  async login(@Body() loginDto: LoginDTO) {
+    return await this._authService.login(loginDto);
+  }
 
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @Get('getLoggedInUser')
-    async getLoggedInUser(@GetUser() user) {
-        return user;
-    }
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('getLoggedInUser')
+  async getLoggedInUser(@GetUser() user) {
+    return user;
+  }
 
-    @Post('forgotPassword')
-    async forgotPassword(@Body() emailDto: EmailDTO) {
-        return await this._authService.forgotPassword(emailDto);
-    }
+  @Post('forgotPassword')
+  async forgotPassword(@Body() emailDto: EmailDTO) {
+    return await this._authService.forgotPassword(emailDto);
+  }
 
-    @Post('verifyForgotPasswordOtp')
-    async verifyForgotPasswordOtp(@Body() otpDto: OtpDTO) {
-        return await this._authService.verifyForgotPasswordOtp(otpDto);
-    }
+  @Post('verifyForgotPasswordOtp')
+  async verifyForgotPasswordOtp(@Body() otpDto: OtpDTO) {
+    return await this._authService.verifyForgotPasswordOtp(otpDto);
+  }
 
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @Post('resetPassword')
-    async resetPassword(@Body() passwordDto: PasswordDTO, @GetUser() user) {
-        return await this._authService.resetPassword(passwordDto, user);
-    }
-
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('resetPassword')
+  async resetPassword(@Body() passwordDto: PasswordDTO, @GetUser() user) {
+    return await this._authService.resetPassword(passwordDto, user);
+  }
 }

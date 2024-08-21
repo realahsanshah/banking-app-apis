@@ -21,14 +21,12 @@ describe('AppController (e2e)', () => {
     app.useGlobalFilters(
       new HttpExceptionFilter(reflector),
       new QueryFailedFilter(reflector),
-      new ErrorFilter(reflector)
+      new ErrorFilter(reflector),
     );
     await app.init();
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200);
+    return request(app.getHttpServer()).get('/').expect(200);
   });
 });

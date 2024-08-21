@@ -20,7 +20,6 @@ import { TransactionView } from '../../view-entity/transaction-view/transaction.
       Otp,
       WalletWithUserView,
       TransactionView,
-
     ]),
     JwtModule.registerAsync({
       imports: [],
@@ -29,12 +28,12 @@ import { TransactionView } from '../../view-entity/transaction-view/transaction.
           secret: process.env.JWT_SECRET,
           signOptions: { expiresIn: '360000000s' },
           global: true,
-        }
-      }
+        };
+      },
     }),
   ],
   controllers: [WalletController],
   providers: [WalletService, UtilsService],
   exports: [WalletModule],
 })
-export class WalletModule { }
+export class WalletModule {}

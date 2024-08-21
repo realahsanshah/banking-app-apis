@@ -14,7 +14,7 @@ export class AppService {
   getHello(): any {
     return {
       message: 'Hello World!',
-    }
+    };
   }
 
   static envConfiguration(): string {

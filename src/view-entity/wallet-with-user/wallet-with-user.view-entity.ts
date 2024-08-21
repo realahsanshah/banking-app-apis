@@ -1,8 +1,8 @@
 import { ViewEntity, ViewColumn } from 'typeorm';
 
 @ViewEntity({
-    name: 'wallet_with_user',
-    expression: `
+  name: 'wallet_with_user',
+  expression: `
     SELECT
         w.id AS wallet_id,
         w.account_number,
@@ -19,55 +19,55 @@ import { ViewEntity, ViewColumn } from 'typeorm';
         wallets w
     INNER JOIN
         users u ON w."userId" = u.id;
-    `
+    `,
 })
 export class WalletWithUserView {
-    @ViewColumn()
-    wallet_id: string;
+  @ViewColumn()
+  wallet_id: string;
 
-    @ViewColumn()
-    account_number: string;
+  @ViewColumn()
+  account_number: string;
 
-    @ViewColumn()
-    iban: string;
+  @ViewColumn()
+  iban: string;
 
-    @ViewColumn()
-    balance: number;
+  @ViewColumn()
+  balance: number;
 
-    @ViewColumn()
-    is_active: boolean;
+  @ViewColumn()
+  is_active: boolean;
 
-    @ViewColumn()
-    is_freezed: boolean;
+  @ViewColumn()
+  is_freezed: boolean;
 
-    @ViewColumn()
-    email: string;
+  @ViewColumn()
+  email: string;
 
-    @ViewColumn()
-    user_id: string;
+  @ViewColumn()
+  user_id: string;
 
-    @ViewColumn()
-    full_name: string;
+  @ViewColumn()
+  full_name: string;
 
-    @ViewColumn()
-    cnic: string;
+  @ViewColumn()
+  cnic: string;
 
-    @ViewColumn()
-    gender: string;
+  @ViewColumn()
+  gender: string;
 
-    fromJSON(data: any): WalletWithUserView {
-        this.wallet_id = data.wallet_id;
-        this.account_number = data.account_number;
-        this.iban = data.iban;
-        this.balance = data.balance;
-        this.is_active = data.is_active;
-        this.is_freezed = data.is_freezed;
-        this.user_id = data.user_id;
-        this.full_name = data.full_name;
-        this.cnic = data.cnic;
-        this.email = data.email;
-        this.gender = data.gender
+  fromJSON(data: any): WalletWithUserView {
+    this.wallet_id = data.wallet_id;
+    this.account_number = data.account_number;
+    this.iban = data.iban;
+    this.balance = data.balance;
+    this.is_active = data.is_active;
+    this.is_freezed = data.is_freezed;
+    this.user_id = data.user_id;
+    this.full_name = data.full_name;
+    this.cnic = data.cnic;
+    this.email = data.email;
+    this.gender = data.gender;
 
-        return this;
-    }
+    return this;
+  }
 }

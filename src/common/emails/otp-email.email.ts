@@ -1,5 +1,5 @@
 export const getOtpEmail = (name: string, otp: string) => {
-    return `
+  return `
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,5 +72,5 @@ export const getOtpEmail = (name: string, otp: string) => {
     </div>
 </body>
 </html>
-    `
-}
+    `;
+};

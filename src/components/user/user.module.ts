@@ -28,8 +28,8 @@ import { TransactionView } from '../../view-entity/transaction-view/transaction.
           secret: process.env.JWT_SECRET,
           signOptions: { expiresIn: '360000000s' },
           global: true,
-        }
-      }
+        };
+      },
     }),
     WalletModule,
   ],
@@ -37,4 +37,4 @@ import { TransactionView } from '../../view-entity/transaction-view/transaction.
   providers: [UserService, UtilsService, WalletService],
   exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}
