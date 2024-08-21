@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UtilsService } from '../utils/utils.service';
 import { Transaction } from 'src/entity/transaction/transaction.entity';
 import { Otp } from 'src/entity/otp/otp.entity';
+import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with-user.view-entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Otp } from 'src/entity/otp/otp.entity';
       Wallet,
       Transaction,
       Otp,
+      WalletWithUserView,
     ]),
     JwtModule.registerAsync({
       imports: [],

@@ -8,12 +8,16 @@ import { Transaction } from 'src/entity/transaction/transaction.entity';
 import { UtilsService } from '../utils/utils.service';
 import { TransactionStatusEnum } from 'src/enum/transaction-status/transaction-status.enum';
 import { TransactionTypeEnum } from 'src/enum/transaction-type/transaction-type.enum';
+import { TransferDTO } from './dto/transfer.dto';
+import { User } from 'src/entity/user/user.entity';
+import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with-user.view-entity';
 
 @Injectable()
 export class WalletService {
     constructor(
-
+        @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Wallet) private walletRepository: Repository<Wallet>,
+        @InjectRepository(WalletWithUserView) private walletWithUserViewRepository: Repository<WalletWithUserView>,
         private utilsService: UtilsService,
     ) { }
 
@@ -109,5 +113,59 @@ export class WalletService {
             wallet,
             transaction,
         };
+    }
+
+    async transferAmount(transferDto: TransferDTO, user) {
+        const [fromWallet, toWalletView, toWallet] = await Promise.all([
+            this.getWallet(user),
+            this.walletWithUserViewRepository.findOne({
+                where: {
+                    iban: transferDto?.iban,
+                },
+            }),
+            this.walletRepository.findOne({
+                where: {
+                    iban: transferDto?.iban,
+                },
+            })
+        ]);
+
+        if (!toWallet) {
+            throw new Error("Invalid Receiver IBAN");
+        }
+
+        if (fromWallet?.balance - transferDto?.amount < 0) {
+            throw new Error("Insufficient Balance");
+        }
+
+        fromWallet.balance -= transferDto?.amount;
+        toWallet.balance += transferDto?.amount;
+
+        const transaction = new Transaction()
+
+        const userData = await this.userRepository.findOne({
+            where: {
+                id: toWalletView?.user_id,
+            }
+        });
+
+        transaction.fromUser = user;
+        transaction.toUser = userData;
+        transaction.amount = transferDto?.amount;
+        transaction.transactionStatus = TransactionStatusEnum.COMPLETED;
+        transaction.transactionType = TransactionTypeEnum.TRANSFER;
+
+        await this.utilsService.commitTransactions([
+            fromWallet,
+            toWallet,
+            transaction,
+        ]);
+
+        return {
+            message: "Transfer successfully",
+            fromWallet,
+            toWallet,
+            transaction
+        }
     }
 }

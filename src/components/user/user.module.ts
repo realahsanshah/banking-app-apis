@@ -9,6 +9,7 @@ import { UtilsService } from '../utils/utils.service';
 import { Wallet } from 'src/entity/wallet/wallet.entity';
 import { WalletModule } from '../wallet/wallet.module';
 import { WalletService } from '../wallet/wallet.service';
+import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with-user.view-entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WalletService } from '../wallet/wallet.service';
       User,
       Otp,
       Wallet,
+      WalletWithUserView,
     ]),
     JwtModule.registerAsync({
       imports: [],

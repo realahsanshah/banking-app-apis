@@ -4,6 +4,7 @@ import { WalletService } from './wallet.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetUser } from 'src/decorator/user.decorator';
 import { AmountDTO } from './dto/amount.dto';
+import { TransferDTO } from './dto/transfer.dto';
 
 @ApiTags('Wallet')
 @Controller('wallet')
@@ -29,5 +30,12 @@ export class WalletController {
     @Post('withdrawAmount')
     withdrawAmount(@Body() amountDto: AmountDTO, @GetUser() user) {
         return this.walletService.withdrawAmount(amountDto, user);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Post('transferAmount')
+    transferAmount(@Body() transferDto: TransferDTO, @GetUser() user) {
+        return this.walletService.transferAmount(transferDto, user);
     }
 }

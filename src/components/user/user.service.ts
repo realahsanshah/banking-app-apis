@@ -105,11 +105,11 @@ export class UserService {
                 is_deleted: false,
             }
         });
-        debugger
+
         if (!user) {
             throw new Error('User not found');
         }
-        debugger
+
         const otp = await this.otpRepository.findOne({
             where: {
                 user: {
@@ -120,11 +120,11 @@ export class UserService {
                 otpType: OtpTypeEnum.VERIFY_USER,
             }
         });
-        debugger
+
         if (!otp) {
             throw new Error('Invalid OTP');
         }
-        debugger
+
         // check expiry of otp
         if (otp?.expiresAt < new Date()) {
             throw new Error('OTP expired');

@@ -15,10 +15,10 @@ export class User extends BaseEntity {
         type: 'varchar',
         length: 255,
         nullable: false,
-        transformer: {
-            to: (value: string) => value.toLowerCase(),
-            from: (value: string) => value,
-        },
+        // transformer: {
+        //     to: (value: string) => value.toLowerCase(),
+        //     from: (value: string) => value,
+        // },
     })
     @Index({ unique: true, where: 'is_deleted = false' })
     email: string;

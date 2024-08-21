@@ -8,7 +8,7 @@ export class Wallet extends BaseEntity {
     id: string;
 
     @ManyToOne(() => User, user => user.id)
-    @JoinColumn({ name: "userId" })
+    @JoinColumn({ name: "userId", referencedColumnName: "id" })
     user: User;
 
     @Column({
