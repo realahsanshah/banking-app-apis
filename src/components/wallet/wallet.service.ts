@@ -11,6 +11,7 @@ import { TransactionTypeEnum } from 'src/enum/transaction-type/transaction-type.
 import { TransferDTO } from './dto/transfer.dto';
 import { User } from 'src/entity/user/user.entity';
 import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with-user.view-entity';
+import { TransactionView } from 'src/view-entity/transaction-view/transaction.view-entity';
 
 @Injectable()
 export class WalletService {
@@ -18,6 +19,7 @@ export class WalletService {
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Wallet) private walletRepository: Repository<Wallet>,
         @InjectRepository(WalletWithUserView) private walletWithUserViewRepository: Repository<WalletWithUserView>,
+        @InjectRepository(TransactionView) private transactionViewRepository: Repository<TransactionView>,
         private utilsService: UtilsService,
     ) { }
 
@@ -167,5 +169,29 @@ export class WalletService {
             toWallet,
             transaction
         }
+    }
+
+    async getTransactions(limit: number, offset: number, user) {
+        limit = Number(limit) ? Number(limit) : 10;
+        offset = Number(offset) ? Number(offset) : 0;
+
+        const transactions = await this.transactionViewRepository.find({
+            // where with fromUser OR toUser
+            where: [
+                {
+                    fromUserId: user?.id,
+                },
+                {
+                    toUserId: user?.id,
+                },
+            ],
+            order: {
+                created_at: "DESC",
+            },
+            take: limit,
+            skip: offset,
+        });
+
+        return transactions;
     }
 }

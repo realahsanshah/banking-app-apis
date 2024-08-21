@@ -6,6 +6,7 @@ import { Otp } from './entity/otp/otp.entity';
 import { Wallet } from './entity/wallet/wallet.entity';
 import { Transaction } from './entity/transaction/transaction.entity';
 import { WalletWithUserView } from './view-entity/wallet-with-user/wallet-with-user.view-entity';
+import { TransactionView } from './view-entity/transaction-view/transaction.view-entity';
 
 @Injectable()
 export class AppService {
@@ -27,6 +28,7 @@ export class AppService {
         Wallet,
         Transaction,
         WalletWithUserView,
+        TransactionView,
       ],
       synchronize: true,
     };

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { WalletService } from './wallet.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetUser } from 'src/decorator/user.decorator';
@@ -37,5 +37,17 @@ export class WalletController {
     @Post('transferAmount')
     transferAmount(@Body() transferDto: TransferDTO, @GetUser() user) {
         return this.walletService.transferAmount(transferDto, user);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @ApiQuery({ name: 'limit', required: false, example: 10, type: Number })
+    @ApiQuery({ name: 'offset', required: false, example: 0, type: Number })
+    @Get('getTransactions')
+    getTransactions(
+        @Query('limit') limit = 10,
+        @Query('offset') offset = 0,
+        @GetUser() user) {
+        return this.walletService.getTransactions(limit, offset, user);
     }
 }

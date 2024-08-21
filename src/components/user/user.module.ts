@@ -10,6 +10,7 @@ import { Wallet } from 'src/entity/wallet/wallet.entity';
 import { WalletModule } from '../wallet/wallet.module';
 import { WalletService } from '../wallet/wallet.service';
 import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with-user.view-entity';
+import { TransactionView } from 'src/view-entity/transaction-view/transaction.view-entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { WalletWithUserView } from 'src/view-entity/wallet-with-user/wallet-with
       Otp,
       Wallet,
       WalletWithUserView,
+      TransactionView,
     ]),
     JwtModule.registerAsync({
       imports: [],
